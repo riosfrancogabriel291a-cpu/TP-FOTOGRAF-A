@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lo que se ve entrecerrando los ojos</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #e7e7e7;
+      text-align: center;
+    }
+
+    header {
+      padding: 80px 20px;
+      background: #000;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: bold;
+      font-family: "Times New Roman", serif;
+      letter-spacing: 2px;
+    }
+
+    .curtains-wrapper {
+      margin-top: 50px;
+      position: relative;
+      height: 300px;
+      overflow: hidden;
+    }
+
+    .curtain {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: #111;
+      transition: transform 1s ease;
+      cursor: pointer;
+    }
+
+    .curtain.left {
+      left: 0;
+      background: linear-gradient(to right, #000, #333);
+    }
+
+    .curtain.right {
+      right: 0;
+      background: linear-gradient(to left, #000, #333);
+    }
+
+    .open .left { transform: translateX(-100%); }
+    .open .right { transform: translateX(100%); }
+
+    .gallery {
+      display: none;
+      margin-top: 40px;
+      opacity: 0;
+    }
+
+    .gallery img {
+      width: 300px;
+      margin: 10px;
+      border-radius: 8px;
+      filter: contrast(105%) saturation(115%);
+      transition: all 0.3s ease;
+    }
+
+    .gallery img:hover {
+      filter: drop-shadow(-3px 0px 1px rgba(255,0,0,0.3)) drop-shadow(3px 0px 1px rgba(0,255,255,0.3));
+    }
+
+    footer {
+      margin-top: 80px;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #333;
+    }
+
+    /* grain */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: url("https://grainy-gradients.vercel.app/noise.svg");
+      mix-blend-mode: soft-light;
+      opacity: 0.22;
+    }
+
+    /* vignette */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.45));
+    }
+
+    /* projector flicker */
+    @keyframes filmFlicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.9; }
+    }
+    body { animation: filmFlicker 4s infinite alternate ease-in-out; }
+
+    /* lens breathing */
+    @keyframes lensBreathing {
+      0% { filter: blur(6px) brightness(0.6) contrast(120%); transform: scale(1.08); }
+      40% { filter: blur(3px) brightness(0.8) contrast(110%); transform: scale(1.03); }
+      100% { filter: blur(0px) brightness(1) contrast(100%); transform: scale(1); }
+    }
+    body.loading-transition { animation: lensBreathing 1.8s ease-out forwards; }
+
+    /* gallery fade zoom */
+    @keyframes galleryFadeZoom {
+      0% { opacity: 0; transform: scale(1.03); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .gallery.show { animation: galleryFadeZoom 1.2s ease-out forwards; }
+  </style>
+</head>
+<body>
+  <header>Lo que se ve entrecerrando los ojos</header>
+
+  <div class="curtains-wrapper" id="curtains">
+    <div class="curtain left"></div>
+    <div class="curtain right"></div>
+  </div>
+
+  <div class="gallery" id="gallery">
+    <img src="assets/foto1.jpg" alt="Foto 1" />
+    <img src="assets/foto2.jpg" alt="Foto 2" />
+    <img src="assets/foto3.jpg" alt="Foto 3" />
+  </div>
+
+  <footer>Franco Gabriel Ríos - TP Fotografía Trilnick Rud</footer>
+
+  <audio id="clickSound" src="https://cdn.jsdelivr.net/gh/jackyzha0/sfx/camera-click.mp3"></audio>
+
+  <script>
+    const curtains = document.getElementById("curtains");
+    const gallery = document.getElementById("gallery");
+    const clickSound = document.getElementById("clickSound");
+
+    window.addEventListener("load", () => {
+      document.body.classList.add("loading-transition");
+    });
+
+    curtains.addEventListener("click", () => {
+      clickSound.play();
+      curtains.classList.add("open");
+
+      setTimeout(() => {
+        curtains.style.display = "none";
+        gallery.style.display = "block";
+        gallery.classList.add("show");
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
